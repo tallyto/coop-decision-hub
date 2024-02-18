@@ -17,6 +17,19 @@ public class SessaoVotacao {
     @ManyToOne
     private Pauta pauta;
 
+    @Getter
+    private boolean fechada;
+
+    private LocalDateTime dataFechamentoReal;
+
     private LocalDateTime dataAbertura;
     private LocalDateTime dataFechamento;
+
+    public void fecharSessao() {
+        if (!fechada) {
+            fechada = true;
+            dataFechamentoReal = LocalDateTime.now();
+        }
+    }
+
 }
