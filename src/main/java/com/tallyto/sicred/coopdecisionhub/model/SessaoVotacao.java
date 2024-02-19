@@ -18,7 +18,7 @@ public class SessaoVotacao {
     private Pauta pauta;
 
     @Getter
-    private boolean fechada;
+    private boolean fechada = false;
 
     private LocalDateTime dataFechamentoReal;
 

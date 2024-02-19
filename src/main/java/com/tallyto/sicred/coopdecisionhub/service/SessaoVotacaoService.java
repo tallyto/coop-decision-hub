@@ -1,6 +1,6 @@
 package com.tallyto.sicred.coopdecisionhub.service;
 
-import com.tallyto.sicred.coopdecisionhub.facade.SessaoFacade;
+import com.tallyto.sicred.coopdecisionhub.exception.InvalidDateException;
 import com.tallyto.sicred.coopdecisionhub.model.Pauta;
 import com.tallyto.sicred.coopdecisionhub.model.SessaoVotacao;
 import com.tallyto.sicred.coopdecisionhub.repository.SessaoVotacaoRepository;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -18,15 +17,11 @@ public class SessaoVotacaoService {
     private final SessaoVotacaoRepository sessaoVotacaoRepository;
     private final PautaService pautaService;
 
-    private final SessaoFacade  sessaoFacade;
-
     @Autowired
     public SessaoVotacaoService(SessaoVotacaoRepository sessaoVotacaoRepository,
-                                PautaService pautaService,
-                                SessaoFacade sessaoFacade) {
+                                PautaService pautaService) {
         this.sessaoVotacaoRepository = sessaoVotacaoRepository;
         this.pautaService = pautaService;
-        this.sessaoFacade = sessaoFacade;
     }
 
     public SessaoVotacao abrirSessaoVotacao(Long pautaId, LocalDateTime dataFechamento) {
@@ -34,26 +29,31 @@ public class SessaoVotacaoService {
 
         SessaoVotacao sessaoVotacao = new SessaoVotacao();
         sessaoVotacao.setPauta(pauta);
-        sessaoVotacao.setDataAbertura(LocalDateTime.now());
+        var dataAbertura = LocalDateTime.now();
+        sessaoVotacao.setDataAbertura(dataAbertura);
 
-        SessaoVotacao finalSessaoVotacao = sessaoVotacao;
-        sessaoVotacao.setDataFechamento(Objects.requireNonNullElseGet(dataFechamento,
-                () -> finalSessaoVotacao.getDataAbertura().plusMinutes(1)));
+        if (dataFechamento == null) {
+            dataFechamento = LocalDateTime.now().plusMinutes(1);
+        }
+
+        if (dataFechamento.isBefore(dataAbertura)) {
+            throw new InvalidDateException("A data de fechamento deve ser posterior à data de abertura");
+        }
+        sessaoVotacao.setDataFechamento(dataFechamento);
 
         sessaoVotacao = sessaoVotacaoRepository.save(sessaoVotacao);
 
         return sessaoVotacao;
     }
 
-    public void fecharSessao(Long sessaoId) {
+    public SessaoVotacao fecharSessao(Long sessaoId) {
         SessaoVotacao sessaoVotacao = sessaoVotacaoRepository.findById(sessaoId).orElse(null);
         if (sessaoVotacao != null && !sessaoVotacao.isFechada()) {
             sessaoVotacao.fecharSessao();
-            sessaoVotacaoRepository.save(sessaoVotacao);
-
             log.info("Sessão de votação fechada com sucesso.");
-            this.sessaoFacade.fecharSessao(sessaoVotacao);
+            return sessaoVotacaoRepository.save(sessaoVotacao);
         }
+        return null; // Retorna null se não encontrar a sessão ou já estiver fechada.
     }
 
     public SessaoVotacao buscarSessaoPorId(Long sessaoVotacaoId) {

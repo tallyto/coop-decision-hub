@@ -18,7 +18,7 @@ public class SessaoFacade {
         this.producer = producer;
     }
 
-    public void fecharSessao(SessaoVotacao sessao) {
+    public void notificarSessaoFechada(SessaoVotacao sessao) {
         try {
             producer.send(sessao);
         } catch (JsonProcessingException e) {

@@ -1,5 +1,6 @@
 package com.tallyto.sicred.coopdecisionhub.scheduler;
 
+import com.tallyto.sicred.coopdecisionhub.facade.SessaoFacade;
 import com.tallyto.sicred.coopdecisionhub.model.SessaoVotacao;
 import com.tallyto.sicred.coopdecisionhub.service.SessaoVotacaoService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,11 @@ import java.util.List;
 public class SessaoScheduler {
     private final SessaoVotacaoService sessaoVotacaoService;
 
-    public SessaoScheduler(SessaoVotacaoService sessaoVotacaoService) {
+    private final SessaoFacade sessaoFacade;
+
+    public SessaoScheduler(SessaoVotacaoService sessaoVotacaoService, SessaoFacade sessaoFacade) {
         this.sessaoVotacaoService = sessaoVotacaoService;
+        this.sessaoFacade = sessaoFacade;
     }
 
     @Scheduled(fixedRate = 60000) // Executa a cada minuto, ajuste conforme necessário
@@ -28,7 +32,10 @@ public class SessaoScheduler {
 
         for (SessaoVotacao sessao : sessoesAbertas) {
             if (sessao.getDataFechamento().isBefore(agora)) {
-                sessaoVotacaoService.fecharSessao(sessao.getId());
+                var result = sessaoVotacaoService.fecharSessao(sessao.getId());
+                if (result != null) {
+                    sessaoFacade.notificarSessaoFechada(result);
+                }
             }
         }
     }
