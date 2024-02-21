@@ -22,9 +22,8 @@ public class SessaoFacade {
         try {
             producer.send(sessao);
         } catch (JsonProcessingException e) {
-            log.error(e.getMessage(),"Erro ao enviar mensagem", e);
+            log.error(e.getMessage(),"Erro ao processar mensagem", e);
         }
-        log.info("Sessao Fechada");
 	}
 
 }
