@@ -18,7 +18,7 @@ class SessaoVotacaoServiceTest extends BaseTest {
     PautaService pautaService;
 
     @Test
-    void abrirSessaoVotacao() {
+    void deveAbrirSessaoVotacao() {
         var pauta = pautaService.cadastrarPauta("Teste");
         var dataFechamento = LocalDateTime.now().plusMinutes(1);
         var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), dataFechamento);
@@ -26,7 +26,7 @@ class SessaoVotacaoServiceTest extends BaseTest {
     }
 
     @Test
-    void fecharSessao() {
+    void deveFecharSessao() {
         var pauta = pautaService.cadastrarPauta("Teste");
         var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), LocalDateTime.now().plusMinutes(5));
         var sessaoFechada = sessaoVotacaoService.fecharSessao(sessao.getId());
@@ -34,13 +34,13 @@ class SessaoVotacaoServiceTest extends BaseTest {
     }
 
     @Test
-    void abrirSessaoVotacaoInvalida() {
+    void deveAbrirSessaoVotacaoInvalida() {
         var pauta = pautaService.cadastrarPauta("Teste");
         assertThrows(InvalidDateException.class, () -> sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), LocalDateTime.now().minusDays(1)));
     }
 
     @Test
-    void buscarSessaoPorId() {
+    void deveBuscarSessaoPorId() {
         var pauta = pautaService.cadastrarPauta("Teste");
         var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), LocalDateTime.now().plusMinutes(5));
         var sessaoEncontrada = sessaoVotacaoService.buscarSessaoPorId(sessao.getId());
@@ -48,7 +48,7 @@ class SessaoVotacaoServiceTest extends BaseTest {
     }
 
     @Test
-    void buscarSessoesAbertas() {
+    void deveBuscarSessoesAbertas() {
         var pauta = pautaService.cadastrarPauta("Teste");
         var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), LocalDateTime.now().plusMinutes(5));
         var sessoesAbertas = sessaoVotacaoService.buscarSessoesAbertas();

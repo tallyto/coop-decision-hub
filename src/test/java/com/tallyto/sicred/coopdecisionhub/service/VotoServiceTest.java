@@ -18,7 +18,7 @@ class VotoServiceTest extends BaseTest {
     PautaService pautaService;
 
     @Test
-    void votar() {
+    void deveVotar() {
        var pauta = pautaService.cadastrarPauta("Teste");
        var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), null);
        var voto = votoService.votar(sessao.getId(), 1L, true);
@@ -26,7 +26,7 @@ class VotoServiceTest extends BaseTest {
     }
 
     @Test
-    void contarVotos() {
+    void deveContarVotos() {
         var pauta = pautaService.cadastrarPauta("Teste");
         var sessao = sessaoVotacaoService.abrirSessaoVotacao(pauta.getId(), null);
         var voto = votoService.votar(sessao.getId(), 1L, true);

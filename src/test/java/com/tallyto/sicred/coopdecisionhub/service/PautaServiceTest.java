@@ -20,19 +20,19 @@ class PautaServiceTest extends BaseTest {
     }
 
     @Test
-    void DeveCadastrarPauta() {
+    void deveCadastrarPauta() {
         var pauta = pautaService.cadastrarPauta("Pauta Teste");
         assertNotNull(pauta.getId());
     }
 
     @Test
-    void DeveBuscarPautaPorId() {
+    void deveBuscarPautaPorId() {
         var pauta = pautaService.buscarPautaPorId(1L);
         assertNotNull(pauta);
     }
 
     @Test
-    void DeveRetornarNullAoBuscarPautaPorId() {
+    void deveRetornarNullAoBuscarPautaPorId() {
         var pauta = pautaService.buscarPautaPorId(100L);
         assertNull(pauta);
     }
