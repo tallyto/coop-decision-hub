@@ -1,6 +1,6 @@
 package com.tallyto.sicred.coopdecisionhub.exception;
 
-public class ExpiredSessionException extends ValidationException {
+public class ExpiredSessionException extends RuntimeException {
     public ExpiredSessionException(String message) {
         super(message);
     }
