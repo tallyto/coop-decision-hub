@@ -2,12 +2,12 @@
 
 **Descrição do Projeto:**
 
-O Coop Decision Hub é uma aplicação projetada para facilitar o processo de decisão em uma cooperativa, permitindo que os associados participem ativamente de votações sobre diversas pautas. A aplicação oferece funcionalidades essenciais para gerenciar sessões de votação, cadastrar pautas e registrar os votos dos associados.
+O Coop Decision Hub é uma aplicação desenvolvida para simplificar o processo de decisão em cooperativas, permitindo que os associados participem ativamente de votações sobre diversas pautas. A aplicação oferece funcionalidades essenciais para gerenciar sessões de votação, cadastrar pautas e registrar os votos dos associados.
 
 **Tecnologias Utilizadas:**
 
 - **Java 17:** Linguagem de programação utilizada para o desenvolvimento da aplicação.
-- **Spring Boot:** Framework utilizado para criar a aplicação Java de forma rápida e fácil.
+- **Spring Boot:** Framework utilizado para criar a aplicação Java de forma rápida e eficiente.
 - **Spring Data JPA:** Biblioteca que facilita o acesso a dados usando o framework JPA.
 - **Spring Web:** Módulo do Spring para desenvolvimento de aplicativos web.
 - **H2 Database e PostgreSQL:** Bancos de dados utilizados para armazenar informações da aplicação.
@@ -19,7 +19,7 @@ O Coop Decision Hub é uma aplicação projetada para facilitar o processo de de
 
 **Documentação da API:**
 
-A documentação detalhada da API pode ser encontrada em [Documentação da API - Coop Decision Hub](http://localhost:3002/swagger-ui/index.html). Utilize essa documentação para entender os endpoints disponíveis, parâmetros, e exemplos de chamadas.
+A documentação detalhada da API pode ser encontrada em [Documentação da API - Coop Decision Hub](http://localhost:3002/swagger-ui/index.html). Consulte essa documentação para entender os endpoints disponíveis, parâmetros e exemplos de chamadas.
 
 **Exemplo de Chamada da API:**
 
@@ -70,10 +70,44 @@ A documentação detalhada da API pode ser encontrada em [Documentação da API 
 
 4. Acesse a aplicação em [http://localhost:3002](http://localhost:3002).
 
+5. Utilize o Docker Compose (ou similar, como Podman) para iniciar o banco de dados e o RabbitMQ:
+
+   ```bash
+   docker-compose up
+   ```
+
+   *Nota: Certifique-se de ter o Docker (ou Podman) instalado para usar essa opção.*
+
 **Configurações Maven:**
 
 - **Versão do Java:** 17
 - **Versão do Spring Boot Starter:** 3.3.0-SNAPSHOT
+
+**Configuração do Banco de Dados:**
+
+A aplicação utiliza dois perfis de banco de dados: um para desenvolvimento (H2) e outro para produção (PostgreSQL).
+
+- **application-dev.properties (H2 - Desenvolvimento):**
+
+   - Configurações padrão para o ambiente de desenvolvimento.
+
+- **application.properties (PostgreSQL - Default):**
+
+   - Configurações específicas para o ambiente para testes.
+
+**Configuração do Ambiente:**
+
+A aplicação utiliza perfis de ambiente para configurar o banco de dados. Por padrão, o perfil "default" (PostgreSQL) é ativado. Para alterar para o perfil de desenvolvimento (H2), você pode definir a variável de ambiente `SPRING_PROFILES_ACTIVE`. Exemplo:
+
+```bash
+export SPRING_PROFILES_ACTIVE=dev
+```
+
+ou
+
+```bash
+set SPRING_PROFILES_ACTIVE=dev
+```
 
 **Licença:**
 
