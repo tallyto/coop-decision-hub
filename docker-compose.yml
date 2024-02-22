@@ -2,19 +2,34 @@ version: '3.8'
 
 services:
   postgres:
-    image: "postgres:latest"
+    image: postgres:latest
+    container_name: coop_postgres
     environment:
       POSTGRES_USER: "coop@user"
       POSTGRES_PASSWORD: "coop@password"
       POSTGRES_DB: "coop_decision_hub"
     ports:
       - "5432:5432"
+    networks:
+      - coop_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
-    image: "rabbitmq:management"
+    image: rabbitmq:management
+    container_name: coop_rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - coop_network
+
+networks:
+  coop_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
